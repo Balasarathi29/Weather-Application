@@ -1,13 +1,26 @@
 import React, { useState } from "react";
 import { BsSearch } from "react-icons/bs";
-import cloudSpeed from "../assets/cloud.png";
-import cloudy from "../assets/cloudy.png";
-import Humidity from "../assets/weather (1).png";
+import cloudSpeed from "../assets/cloudSpeed.png";
+import Humidity from "../assets/humidity.png";
+import brokenCloudsDay from "../assets/brokenCloudsDay.png";
+import fewCloudsDay from "../assets/fewCloudsDay.png";
+import mist from "../assets/mist.png";
+import moon from "../assets/moon.png";
+import rainDay from "../assets/rainDay.png";
+import scatteredCloudsDay from "../assets/scatteredCloudsDay.png";
+import scatteredCloudsNight from "../assets/scatteredCloudsNight.png";
+import showerRainDay from "../assets/showerRainDay.png";
+import snow from "../assets/snow.png";
+import thunderStormDay from "../assets/thunderStormDay.png";
+import sun from "../assets/sun.png";
 import "../index.css";
 import Swal from "sweetalert2";
+
+
+
 const Content = () => {
   const [weatherData, setWeatherData] = useState({
-    icon: cloudy,
+    icon: sun,
     temp: 0,
     city: "Chennai",
     country: "IN",
@@ -17,6 +30,27 @@ const Content = () => {
     speed: 0,
     searchCity: "",
   });
+  const icons = {
+    "01d": sun,
+    "01n": moon,
+    "02d": fewCloudsDay,
+    "02n": fewCloudsDay,
+    "03d": scatteredCloudsDay,
+    "03n": scatteredCloudsNight,
+    "04d": brokenCloudsDay,
+    "04n": brokenCloudsDay,
+    "09d": showerRainDay,
+    "09n": showerRainDay,
+    "10d": rainDay,
+    "10n": rainDay,
+    "11d": thunderStormDay,
+    "11n": thunderStormDay,
+    "13d": snow,
+    "13n": snow,
+    "50d": mist,  
+    "50n": mist,
+  };
+
   let apiKey = "ff70d0f72cc08b2c5a360270c41eb6cb";
   const search = async (e) => {
     e.preventDefault();
@@ -28,7 +62,7 @@ const Content = () => {
       const data = await response.json();
       console.log(data);
       setWeatherData({
-        icon: cloudy,
+        icon: icons[data.weather[0].icon],
         temp: data.main.temp,
         city: data.name,
         country: data.sys.country,
@@ -39,9 +73,8 @@ const Content = () => {
         searchCity: "",
       });
     } catch (error) {
-      Swal.fire(error.message , "Enter a valid city name");
+      Swal.fire(error.message, "Enter a valid city name");
     }
-
   };
 
   const handleChange = (e) => {
