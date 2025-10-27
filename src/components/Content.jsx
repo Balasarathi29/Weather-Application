@@ -4,24 +4,68 @@ import cloudSpeed from "../assets/cloud.png";
 import cloudy from "../assets/cloudy.png";
 import Humidity from "../assets/weather (1).png";
 import "../index.css";
+import Swal from "sweetalert2";
 const Content = () => {
   const [weatherData, setWeatherData] = useState({
     icon: cloudy,
-    temp: 28,
+    temp: 0,
     city: "Chennai",
     country: "IN",
-    lat: 13.08,
-    log: 80.27,
-    humidity: 78,
-    speed: 10,
+    lat: 0,
+    log: 0,
+    humidity: 0,
+    speed: 0,
+    searchCity: "",
   });
+  let apiKey = "ff70d0f72cc08b2c5a360270c41eb6cb";
+  const search = async (e) => {
+    e.preventDefault();
+    let url = `https://api.openweathermap.org/data/2.5/weather?q=${weatherData.searchCity}&appid=${apiKey}&units=Metric`;
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("City not found");
+      const data = await response.json();
+      console.log(data);
+      setWeatherData({
+        icon: cloudy,
+        temp: data.main.temp,
+        city: data.name,
+        country: data.sys.country,
+        lat: data.coord.lat,
+        lon: data.coord.lon,
+        humidity: data.main.humidity,
+        speed: data.wind.speed,
+        searchCity: "",
+      });
+    } catch (error) {
+      Swal.fire(error.message , "Enter a valid city name");
+    }
+
+  };
+
+  const handleChange = (e) => {
+    setWeatherData({ ...weatherData, searchCity: e.target.value });
+  };
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      search(e);
+    }
+  };
 
   return (
     <div className="weather-card">
       <div className="card-body">
         <form className="search">
-          <input type="text" placeholder="City" aria-label="City" />
-          <button type="submit" aria-label="Search">
+          <input
+            type="text"
+            placeholder="City"
+            aria-label="City"
+            onChange={handleChange}
+            value={weatherData.searchCity}
+            onKeyDown={handleKeyDown}
+          />
+          <button type="submit" aria-label="Search" onClick={search}>
             <BsSearch />
           </button>
         </form>
@@ -47,7 +91,7 @@ const Content = () => {
               </div>
               <div className="coord">
                 <span className="label">Longitude</span>
-                <span className="value">{weatherData.log}° E</span>
+                <span className="value">{weatherData.lon}° E</span>
               </div>
             </div>
 
