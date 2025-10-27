@@ -7,7 +7,7 @@ import fewCloudsDay from "../assets/fewCloudsDay.png";
 import mist from "../assets/mist.png";
 import moon from "../assets/moon.png";
 import rainDay from "../assets/rainDay.png";
-import scatteredCloudsDay from "../assets/scatteredCloudsDay.png";
+import scatteredCloudsDay from "../assets/scatteredCloudsday.png";
 import scatteredCloudsNight from "../assets/scatteredCloudsNight.png";
 import showerRainDay from "../assets/showerRainDay.png";
 import snow from "../assets/snow.png";
