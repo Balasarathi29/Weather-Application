@@ -54,7 +54,7 @@ const Content = () => {
   let apiKey = "ff70d0f72cc08b2c5a360270c41eb6cb";
   const search = async (e) => {
     e.preventDefault();
-    let url = `https://api.openweathermap.org/data/2.5/weather?q=${weatherData.searchCity}&appid=${apiKey}&units=Metric`;
+    let url = `https://api.openweathermap.org/data/2.5/weather?q=${weatherData.searchCity}&appid=${apiKey}&units=metric`;
 
     try {
       const response = await fetch(url);
