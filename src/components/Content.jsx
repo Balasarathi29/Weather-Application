@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import cloudSpeed from "../assets/cloudSpeed.png";
 import Humidity from "../assets/humidity.png";
@@ -22,8 +22,8 @@ const Content = () => {
   const [weatherData, setWeatherData] = useState({
     icon: sun,
     temp: 0,
-    city: "Chennai",
-    country: "IN",
+    city: "City",
+    country: "World",
     lat: 0,
     log: 0,
     humidity: 0,
@@ -54,7 +54,8 @@ const Content = () => {
   let apiKey = "ff70d0f72cc08b2c5a360270c41eb6cb";
   const search = async (e) => {
     e.preventDefault();
-    let url = `https://api.openweathermap.org/data/2.5/weather?q=${weatherData.searchCity}&appid=${apiKey}&units=metric`;
+    let city = weatherData.searchCity || "Chennai";
+    let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
     try {
       const response = await fetch(url);
@@ -77,6 +78,30 @@ const Content = () => {
     }
   };
 
+  useEffect ( () =>{
+    const defaultFetch = async () => {
+      try{
+        let url = `https://api.openweathermap.org/data/2.5/weather?q=Chennai&appid=${apiKey}&units=metric`;
+        const resp = await fetch (url)
+        const data = await resp.json();
+        setWeatherData({
+        icon: icons[data.weather[0].icon],
+        temp: data.main.temp,
+        city: data.name,
+        country: data.sys.country,
+        lat: data.coord.lat,
+        lon: data.coord.lon,
+        humidity: data.main.humidity,
+        speed: data.wind.speed,
+        searchCity: "",
+      });
+      } catch (error){
+        Swal.fire(error.message);
+      } 
+    }
+    defaultFetch();
+  }, []);
+
   const handleChange = (e) => {
     setWeatherData({ ...weatherData, searchCity: e.target.value });
   };
@@ -95,7 +120,7 @@ const Content = () => {
             placeholder="City"
             aria-label="City"
             onChange={handleChange}
-            value={weatherData.searchCity}
+            value = {weatherData.searchCity}
             onKeyDown={handleKeyDown}
           />
           <button type="submit" aria-label="Search" onClick={search}>
